@@ -1,3 +1,4 @@
+import { url } from 'inspector';
 import prisma from '../lib/prisma';
 import { initialData } from './seed';
 async function main() {
@@ -37,7 +38,19 @@ async function main() {
                 categoryId: categoriesMap[type]
             }
         })
-    })
+        
+        
+        const imagesData = images.map( image => ({
+            url: image,
+            productId: dbProduct.id
+        }));
+
+        await prisma.productImage.createMany({
+            data: imagesData
+        })
+
+    });
+
 
 }
 
