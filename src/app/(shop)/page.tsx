@@ -28,7 +28,7 @@ export default async function Shop({searchParams}: Props) {
     <>
       <Title title="Tienda" subtitle="Todos los productos" className="mb-2" />
       <ProductGrid products={products} />
-      <Pagination/>
+      <Pagination totalPages={totalPages} />
     </>
   );
 }
