@@ -50,6 +50,7 @@ export const getPaginatedProductsWithImages = async({
 
         }
     } catch (error) {
-        throw new Error("Failed to get products")
+        console.log("Failed to get products");
+        return {}
     }
 }

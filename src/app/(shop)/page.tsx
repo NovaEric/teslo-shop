@@ -15,13 +15,13 @@ export default async function Shop({searchParams}: Props) {
 
   const { products, currentPage, totalPages } = await getPaginatedProductsWithImages({page});
 
-  console.log({
-    page: currentPage,
-    total: totalPages
-  })
 
-  if (products.length === 0) {
-    redirect('/')
+  // if (products?.length === 0) {
+  //   redirect('/')
+  // }
+
+  if (!products) {
+    return <div className="flex m-60 justify-center self-center text-red-600"> No Products to display :( </div>
   }
 
   return (
