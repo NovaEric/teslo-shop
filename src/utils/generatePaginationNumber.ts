@@ -2,7 +2,7 @@
 
 // [1,2,3,...,7]
 // [1,2,3,...,21,22,23]
- export const generatePagination = (currentPage: number, totalPages: number) => {
+ export const generatePaginationNumbers = (currentPage: number, totalPages: number) => {
 
     // If pages total are less then 7 show all 
     if (totalPages <= 7) {
