@@ -18,7 +18,7 @@ export const Pagination = ({ totalPages }: Props) => {
     const currentPage = isNaN( +pageString ) ? 1 : +pageString;
 
     if (currentPage < 1 || isNaN( +pageString )) {
-        redirect(pathname);
+        redirect(pathname)
     }
 
     const allPages = generatePaginationNumbers(currentPage, totalPages);
