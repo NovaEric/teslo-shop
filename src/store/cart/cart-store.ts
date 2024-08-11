@@ -1,6 +1,7 @@
 
 import { ICartProduct } from "@/interfaces";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 
 interface State {
@@ -12,31 +13,36 @@ interface State {
 }
 
 export const useCartStore = create<State>()(
-    (set, get) => ({
-        cart: [],
-        addProductToCart: (product: ICartProduct) => {
+    persist(
+        (set, get) => ({
+            cart: [],
+            addProductToCart: (product: ICartProduct) => {
 
-            const {cart} = get();
+                const { cart } = get();
 
-            const productInCart = cart.some(
-                (item) => (item.id === product.id && item.sizes === product.sizes)
-            );
+                const productInCart = cart.some(
+                    (item) => (item.id === product.id && item.sizes === product.sizes)
+                );
 
-            if (!productInCart) {
-                set({ cart: [...cart, product]});
-                return;
-            }
-
-            const updatedCartProducts = cart.map( (item) => {
-
-                if (item.id === product.id && item.sizes === product.sizes) {
-                    return { ...item, quantity: item.quantity + product.quantity}
+                if (!productInCart) {
+                    set({ cart: [...cart, product] });
+                    return;
                 }
-                return item;
-            });
 
-            set({ cart: updatedCartProducts});
+                const updatedCartProducts = cart.map((item) => {
+
+                    if (item.id === product.id && item.sizes === product.sizes) {
+                        return { ...item, quantity: item.quantity + product.quantity }
+                    }
+                    return item;
+                });
+
+                set({ cart: updatedCartProducts });
+            }
+        }),
+        {
+            name: 'shopping-cart',
         }
-    })
+    )
 )
 
