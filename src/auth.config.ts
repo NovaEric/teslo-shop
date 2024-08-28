@@ -28,7 +28,6 @@ export const authConfig: NextAuthConfig = {
         //return User without password
         const { password:_, ...rest } = user;
 
-        console.log(rest)
         
         return rest;
       },
@@ -36,4 +35,4 @@ export const authConfig: NextAuthConfig = {
   ],
 };
 
-export const { signIn, signOut, auth } = NextAuth(authConfig);
+export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);
