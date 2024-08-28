@@ -2,15 +2,27 @@
  
 import { signIn } from '@/auth.config';
  
-// ...
  
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
 ) {
   try {
-    const test = await signIn('credentials', Object.fromEntries(formData));
-  } catch (error) {
-    return 'CredentialsSignin';
+    await signIn('credentials', {
+      ...Object.fromEntries(formData),
+      redirect: false
+    });
+
+    return 'Success';
+
+  } catch (error: any) {
+    console.log(error)
+    if (error?.type === 'CredentialsSignin') {
+      
+      return 'CredentialsSignin';
+    }
+    
+    return 'UnknownError';
+
   }
 }
