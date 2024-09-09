@@ -26,3 +26,19 @@ export async function authenticate(
 
   }
 }
+
+export const login = async(email: string, pass: string) => {
+  try {
+
+    await signIn('credentials', {email, pass});
+    return {ok: true};
+    
+  } catch (error) {
+    console.log(error);
+
+    return {
+        ok: false,
+        message: 'Could not login'
+    }
+  }
+}
