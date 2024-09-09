@@ -1,4 +1,3 @@
-import { url } from 'inspector';
 import prisma from '../lib/prisma';
 import { initialData } from './seed';
 async function main() {
