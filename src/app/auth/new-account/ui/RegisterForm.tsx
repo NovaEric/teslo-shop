@@ -1,7 +1,9 @@
 'use client'
 
+import { registerUser } from "@/actions";
 import clsx from "clsx";
 import Link from "next/link";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type FormInputs = {
@@ -12,13 +14,22 @@ type FormInputs = {
 
 export const RegisterForm = () => {
 
+    const [errorMsg, setErrorMsg] = useState('');
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
     const onSubmit: SubmitHandler<FormInputs> = async (data) => {
 
         const { name, email, password } = data;
-        console.log(data)
+        
         //Server action
+        const resp = await registerUser(name, email, password);
+
+        if (!resp.ok) {
+            setErrorMsg(resp.message)
+            return;
+        }
+
+        console.log({resp})
     }
 
     return (
@@ -29,7 +40,7 @@ export const RegisterForm = () => {
                 errors.name?.type === 'required' && (
                     <span className="text-red-500">Name is required</span>
                 )
-
+                
             }
             <input
                 placeholder="Full Name"
@@ -74,7 +85,7 @@ export const RegisterForm = () => {
                 errors.password?.type === 'required' && (
                     <span className="text-red-500">Password Must be 6 characters minimum </span>
                 )
-
+                
             }
             <input
                 placeholder="Password"
@@ -88,7 +99,10 @@ export const RegisterForm = () => {
                 }
                 type="password"
                 {...register('password', { required: true, minLength: 6 })}
-            />
+            />                
+            
+            <span className="text-red-500">{ errorMsg }</span>
+            
             <button
                 className="btn-primary">
                 Create Account
