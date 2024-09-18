@@ -7,10 +7,7 @@ import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
 import { ICountry } from '@/interfaces';
 
-
-// import type { Address, Country } from '@/interfaces';
-// import { useAddressStore } from '@/store';
-// import { deleteUserAddress, setUserAddress } from '@/actions';
+import { useAddressStore } from '@/store';
 
 
 type FormInputs = {
@@ -46,25 +43,20 @@ export const AddressForm = ({ countries }: Props) => {
     required: true,
   })
 
-//   const setAddress = useAddressStore( state => state.setAddress );
-//   const address = useAddressStore( state => state.address );
+  const setAddress = useAddressStore( state => state.setAddress );
+  const address = useAddressStore( state => state.address );
 
-
-
-//   useEffect(() => {
-//     if ( address.firstName ) {
-//       reset(address)
-//     }
-//   },[])
-  
-
-
+  useEffect(() => {
+    if ( address.firstName ) {
+      reset(address)
+    }
+  },[])
 
 
   const onSubmit = async( data: FormInputs ) => {
     
 
-    // setAddress(data);
+    setAddress(data);
     // const { rememberAddress, ...restAddress } = data;
 
     // if ( rememberAddress ) {
