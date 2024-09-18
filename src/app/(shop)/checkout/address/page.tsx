@@ -1,7 +1,8 @@
 
 import { Title } from "@/components";
 import { AddressForm } from "./ui/AddressForm";
-import { getCountries } from "@/actions/country/get-country";
+import { getCountries } from "@/actions";
+
 
 export default async function AddressPage() {
 
