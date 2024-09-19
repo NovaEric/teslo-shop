@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
-import { ICountry } from '@/interfaces';
+import { IAddress, ICountry } from '@/interfaces';
 
 import { useAddressStore } from '@/store';
+import { deleteUserAddress, setUserAddress } from '@/actions';
 
 
 type FormInputs = {
@@ -25,16 +26,16 @@ type FormInputs = {
 
 interface Props {
   countries: ICountry[];
-  //userStoredAddress?: Partial<Address>;
+  userStoredAddress?: Partial<IAddress>;
 }
 
 
-export const AddressForm = ({ countries }: Props) => {
+export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
 
   const router = useRouter();
   const { handleSubmit, register, formState: { isValid }, reset } = useForm<FormInputs>({
     defaultValues: {
-    //   ...(userStoredAddress as any),
+      ...(userStoredAddress as any),
       rememberAddress: false,
     }
   });
@@ -55,15 +56,15 @@ export const AddressForm = ({ countries }: Props) => {
 
   const onSubmit = async( data: FormInputs ) => {
     
-
+    console.log(data)
     setAddress(data);
-    // const { rememberAddress, ...restAddress } = data;
+    const { rememberAddress, ...restAddress } = data;
 
-    // if ( rememberAddress ) {
-    //   await setUserAddress(restAddress, session!.user.id );
-    // } else {
-    //   await deleteUserAddress(session!.user.id);
-    // }
+    if ( rememberAddress ) {
+      await setUserAddress(restAddress, session!.user.id );
+    } else {
+      await deleteUserAddress(session!.user.id);
+    }
 
     router.push('/checkout');
 
@@ -151,7 +152,7 @@ export const AddressForm = ({ countries }: Props) => {
             </div>
           </label>
 
-          <span>¿Recordar dirección?</span>
+          <span>Remember address?</span>
         </div>
 
         <button
@@ -164,7 +165,7 @@ export const AddressForm = ({ countries }: Props) => {
             'btn-disabled': !isValid,
           })}
         >
-          Siguiente
+          Next
         </button>
       </div>
     </form>
