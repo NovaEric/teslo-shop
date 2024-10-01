@@ -56,5 +56,20 @@ export const placeOrder = async(productIds: ProductToOrder[], address: IAddress 
         return totals;
     }, {subTotal: 0, tax: 0, total: 0});
 
-    console.log({ subTotal, tax, total })
+    // Create database transaction
+    const prismaTransaction = await prisma.$transaction( async(tx) => {
+        // Update stock
+
+
+        // Create order
+
+        // Create order address
+
+        return {
+            order: 123,
+            updatedProducts: [],
+            orderAddress: {}
+        }
+    })
+
 }
