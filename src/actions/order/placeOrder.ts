@@ -34,7 +34,27 @@ export const placeOrder = async(productIds: ProductToOrder[], address: IAddress 
         }
     });
 
-    // Calculate amount
+    // Calculate total items
     const itemsInOrder = productIds.reduce((count, p) => count + p.quantity , 0);
 
+    // Calculate total tax, subtotal, and total
+    const {subTotal, tax, total} = productIds.reduce((totals, item) => {
+
+        const productQty = item.quantity;
+        const product = products.find( p => p.id === item.productId);
+
+        if (!product) {
+            throw new Error(`${item.productId} does not exist`)
+        };
+
+        const subTotal = product.price * productQty;
+
+        totals.subTotal += subTotal;
+        totals.tax += subTotal * 0.15;
+        totals.total += subTotal * 1.15;
+
+        return totals;
+    }, {subTotal: 0, tax: 0, total: 0});
+
+    console.log({ subTotal, tax, total })
 }
