@@ -3,6 +3,7 @@
 import { auth } from "@/auth.config";
 import { IAddress, Size } from "@/interfaces";
 import prisma from "@/lib/prisma";
+import { create } from 'zustand';
 
 interface ProductToOrder {
     productId: string;
@@ -62,11 +63,31 @@ export const placeOrder = async(productIds: ProductToOrder[], address: IAddress 
 
 
         // Create order
+        const order = await tx.order.create({
+            data: {
+                userId: userId,
+                itemsInOrder: itemsInOrder,
+                subTotal: subTotal,
+                tax: tax,
+                total: total,
+
+                OrderItem: {
+                    createMany: {
+                        data: productIds.map( p => ({
+                            quantity: p.quantity,
+                            productId: p.productId,
+                            size: p.size,
+                            price: products.find( p2 => p2.id === p.productId)?.price ?? 0
+                        }))
+                    }
+                }
+            }
+        })
 
         // Create order address
 
         return {
-            order: 123,
+            order: order,
             updatedProducts: [],
             orderAddress: {}
         }
