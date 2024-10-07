@@ -127,7 +127,7 @@ export const placeOrder = async (
       });
 
       return {
-        updatedProducts: [],
+        updatedProducts: updatedProducts,
         order: order,
         orderAddress: orderAddress,
       };
