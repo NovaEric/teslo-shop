@@ -3,16 +3,22 @@ import { placeOrder } from "@/actions";
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export const PlaceOrder = () => {
+
+  const router = useRouter();
   const [loaded, setLoaded] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
   const address = useAddressStore((state) => state.address);
   const { subTotal, getTotalItems, tax, total } = useCartStore((state) =>
     state.getSummaryInformation()
   );
   const cart = useCartStore(state => state.cart);
+  const clearCart = useCartStore(state => state.clearCart);
 
   useEffect(() => {
     setLoaded(true);
@@ -27,11 +33,18 @@ export const PlaceOrder = () => {
         size: product.sizes
     }))
     
+    //! Server Action
     const res = await placeOrder(productsToOrder, address);
 
-    setIsPlacingOrder(true);
-    console.log({res})
-
+    if (!res.ok) {
+      setIsPlacingOrder(true);
+      setErrorMsg(res.message);
+      return;
+    }
+    
+    //* Todo salio bien!
+    clearCart();
+    router.replace( '/orders/' + res.order?.id );
   };
 
   if (!loaded) {
@@ -94,7 +107,7 @@ export const PlaceOrder = () => {
           </span>
         </p>
 
-        {/* <p className="text-red-500"> Error placing order </p> */}
+        <p className="text-red-500"> { errorMsg } </p>
         <button 
         onClick={onPlaceOrder}
         className={clsx({
