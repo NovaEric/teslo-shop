@@ -21,11 +21,13 @@ interface Props {
 }
 
 
-export default function OrderPage( { params }: Props ) {
+export default async function OrderPage( { params }: Props ) {
 
   const { id } = params;
 
-  // Todo: verificar
+  //TODO: call server action
+
+  // TODO: verificar
   // redirect(/)
 
 
@@ -35,7 +37,7 @@ export default function OrderPage( { params }: Props ) {
 
       <div className="flex flex-col w-[1000px]">
 
-        <Title title={ `Orden #${ id }` } />
+        <Title title={ `Orden #${ id.split('-').at(-1) }` } />
 
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
