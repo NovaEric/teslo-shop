@@ -9,6 +9,7 @@ export * from './auth/register';
 export * from './country/get-country';
 
 export * from './order/placeOrder';
+export * from './order/getOrderById';
 
 export * from './address/setUserAddress';
 export * from './address/deleteUserAddress';
