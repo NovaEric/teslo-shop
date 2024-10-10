@@ -10,6 +10,7 @@ export * from './country/get-country';
 
 export * from './order/placeOrder';
 export * from './order/getOrderById';
+export * from './order/getOrderByUser';
 
 export * from './address/setUserAddress';
 export * from './address/deleteUserAddress';
