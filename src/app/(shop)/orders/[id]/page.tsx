@@ -1,4 +1,4 @@
-import { Title } from "@/components";
+import { PaypalButton, Title } from "@/components";
 import { initialData } from "@/seed/seed";
 import Image from "next/image";
 import clsx from "clsx";
@@ -131,7 +131,7 @@ export default async function OrderPage({ params }: Props) {
             </div>
 
             <div className="mt-5 mb-2 w-full">
-              <IsPaid/>
+              <PaypalButton/>
             </div>
           </div>
         </div>
