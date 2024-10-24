@@ -8,6 +8,8 @@ export * from './auth/register';
 
 export * from './country/get-country';
 
+export * from './payments/setTransactionId';
+
 export * from './order/placeOrder';
 export * from './order/getOrderById';
 export * from './order/getOrderByUser';
