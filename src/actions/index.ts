@@ -9,6 +9,7 @@ export * from './auth/register';
 export * from './country/get-country';
 
 export * from './payments/setTransactionId';
+export * from './payments/paypalCheckPayment';
 
 export * from './order/placeOrder';
 export * from './order/getOrderById';
