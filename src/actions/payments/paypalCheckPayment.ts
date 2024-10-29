@@ -1,18 +1,46 @@
 "use server";
 
+import { IPaypalOrderStatus } from "@/interfaces";
+
 export const paypalCheckPayment = async (paypalTransactionId: string) => {
   const authToken = await getPaypalBearerToken();
-  console.log({authToken});
+  console.log({ authToken });
 
   if (!authToken) {
     return {
-        ok: false,
-        message: 'Could not get token'
-    }
+      ok: false,
+      message: "Could not get token",
+    };
   }
+
+  const getVerifyPaypalPayment = await verifyPaypalPayment(
+    paypalTransactionId,
+    authToken
+  );
+
+  if (!getVerifyPaypalPayment) {
+    return {
+      ok: false,
+      message: "Error trying to verify payment",
+    };
+  }
+
+  const { status, purchase_units } = getVerifyPaypalPayment;
+  // TODO const { } = purchase_units[0];
+
+  if (status !== "COMPLETED") {
+    return {
+      ok: false,
+      message: "Not yet paid at Paypal",
+    };
+  }
+
+  // TODO: update DB
+
+  console.log({ status, purchase_units });
 };
 
-const getPaypalBearerToken = async (): Promise<string|null> => {
+const getPaypalBearerToken = async (): Promise<string | null> => {
   const base64Token = Buffer.from(
     `${process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`,
     "utf-8"
@@ -41,6 +69,28 @@ const getPaypalBearerToken = async (): Promise<string|null> => {
     ).then((response) => response.json());
 
     return result.access_token;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+const verifyPaypalPayment = async (
+  paypalTransactionId: string,
+  bearerToken: string
+): Promise<IPaypalOrderStatus | null> => {
+  const paypalOrderUrl = `${process.env.PAYPAL_ORDERS_URL}/${paypalTransactionId}`;
+  const myHeaders = new Headers();
+  myHeaders.append("Authorization", `Bearer ${bearerToken}`);
+
+  const requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+  };
+  try {
+    return await fetch(paypalOrderUrl, requestOptions).then((response) =>
+      response.json()
+    );
   } catch (error) {
     console.log(error);
     return null;
