@@ -1,31 +1,32 @@
 "use server";
 
 import { IPaypalOrderStatus } from "@/interfaces";
+import prisma from "@/lib/prisma";
 
 export const paypalCheckPayment = async (paypalTransactionId: string) => {
   const authToken = await getPaypalBearerToken();
-  console.log({ authToken });
-
+  
   if (!authToken) {
     return {
       ok: false,
       message: "Could not get token",
     };
   }
-
+  
   const getVerifyPaypalPayment = await verifyPaypalPayment(
     paypalTransactionId,
     authToken
   );
-
+  
   if (!getVerifyPaypalPayment) {
     return {
       ok: false,
       message: "Error trying to verify payment",
     };
   }
-
+  
   const { status, purchase_units } = getVerifyPaypalPayment;
+  console.log({ status, purchase_units });
   // TODO const { } = purchase_units[0];
 
   if (status !== "COMPLETED") {
@@ -35,9 +36,24 @@ export const paypalCheckPayment = async (paypalTransactionId: string) => {
     };
   }
 
-  // TODO: update DB
-
-  console.log({ status, purchase_units });
+  try {
+    
+    await prisma.order.update({
+      where: {id: 'ad4cc439-28e9-4035-a0b7-68f706467e1e'},
+      data: {
+        isPaid: true,
+        paidAt: new Date()
+      }
+    })
+   
+    //TODO: revalidate path
+  } catch (error) {
+    console.log(error)
+    return {
+      ok: false,
+      message: "Could not complete payment",
+    };
+  }
 };
 
 const getPaypalBearerToken = async (): Promise<string | null> => {
@@ -65,7 +81,10 @@ const getPaypalBearerToken = async (): Promise<string | null> => {
   try {
     const result = await fetch(
       process.env.PAYPAL_OAUTH_URL ?? "",
-      requestOptions
+      {
+        ...requestOptions,
+        cache: 'no-store'
+      }
     ).then((response) => response.json());
 
     return result.access_token;
@@ -88,7 +107,10 @@ const verifyPaypalPayment = async (
     headers: myHeaders,
   };
   try {
-    return await fetch(paypalOrderUrl, requestOptions).then((response) =>
+    return await fetch(paypalOrderUrl, {
+      ...requestOptions,
+      cache: 'no-store'
+    }).then((response) =>
       response.json()
     );
   } catch (error) {
