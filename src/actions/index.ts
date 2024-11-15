@@ -14,6 +14,7 @@ export * from './payments/paypalCheckPayment';
 export * from './order/placeOrder';
 export * from './order/getOrderById';
 export * from './order/getOrderByUser';
+export * from './order/getPaginatedOrders';
 
 export * from './address/setUserAddress';
 export * from './address/deleteUserAddress';
