@@ -76,7 +76,7 @@ export default async function OrderPage({ params }: Props) {
                   <p>{item.product.title}</p>
                   <p>${item.price * item.quantity}</p>
                   <p className="font-bold">
-                    Subtotal: ${currencyFormat(item.price * item.quantity)}
+                    Subtotal: {currencyFormat(item.price * item.quantity)}
                   </p>
                 </div>
               </div>
@@ -115,17 +115,17 @@ export default async function OrderPage({ params }: Props) {
 
                 <span>Subtotal</span>
                 <span className="text-right">
-                  ${currencyFormat(order!.subTotal)}
+                  {currencyFormat(order!.subTotal)}
                 </span>
 
                 <span>Tax (15%)</span>
                 <span className="text-right">
-                  ${currencyFormat(order!.tax)}
+                  {currencyFormat(order!.tax)}
                 </span>
 
                 <span className="mt-5 text-2xl">Total:</span>
                 <span className="mt-5 text-2xl text-right">
-                  ${currencyFormat(order!.total)}
+                  {currencyFormat(order!.total)}
                 </span>
               </div>
             </div>
