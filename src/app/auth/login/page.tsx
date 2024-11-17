@@ -9,6 +9,12 @@ export default function LoginPage() {
       <h1 className={`${titleFont.className} text-4xl mb-5`}>Login</h1>
 
       <LoginForm />
+      <Link
+        href='/'
+        className="font-normal hover:underline transition-all text-center"
+      >
+        Go back to home page
+      </Link>
     </div>
   );
 }
