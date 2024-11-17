@@ -9,6 +9,7 @@ export * from './auth/register';
 export * from './country/get-country';
 
 export * from './users/getPaginatedUsers';
+export * from './users/changeUserRole';
 
 export * from './payments/setTransactionId';
 export * from './payments/paypalCheckPayment';
