@@ -1,14 +1,16 @@
 "use client";
 
-import { Product } from "@/interfaces";
+import { ICategory, Product } from "@/interfaces";
 
 interface Props {
   product: Product;
+  categories: ICategory[];
 }
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
-export const ProductForm = ({ product }: Props) => {
+export const ProductForm = ({ product, categories }: Props) => {
+    
   return (
     <form className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
       {/* Textos */}
@@ -45,7 +47,7 @@ export const ProductForm = ({ product }: Props) => {
         <div className="flex flex-col mb-2">
           <span>Gender</span>
           <select title="Select Gender" className="p-2 border rounded-md bg-gray-200">
-            <option value="">[Seleccione]</option>
+            <option value="">[Select]</option>
             <option value="men">Men</option>
             <option value="women">Women</option>
             <option value="kid">Kid</option>
@@ -57,6 +59,11 @@ export const ProductForm = ({ product }: Props) => {
           <span>Category</span>
           <select title="Select Category" className="p-2 border rounded-md bg-gray-200">
             <option value="">[Select]</option>
+            {
+                categories.map( ca => {
+                    return <option key={ca.id} value={ca.id}>{ca.name}</option>
+                })
+            }
           </select>
         </div>
 
@@ -70,7 +77,7 @@ export const ProductForm = ({ product }: Props) => {
         {/* As checkboxes */}
         <div className="flex flex-col">
 
-          <span>Tallas</span>
+          <span>Sizes</span>
           <div className="flex flex-wrap">
             
             {

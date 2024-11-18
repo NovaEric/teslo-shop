@@ -2,6 +2,7 @@ import { Title } from "@/components";
 import { getProductBySlug } from '../../../../../actions/product/get-product-by-slug';
 import { redirect } from "next/navigation";
 import { ProductForm } from "./ui/ProductForm";
+import { getCategories } from "@/actions";
 
 
 interface Props {
@@ -14,7 +15,10 @@ export default async function ProductPage({ params }: Props) {
 
     const { slug } = params;
 
-    const product = await getProductBySlug(slug);
+    const [ product, categories ] = await Promise.all([
+        getProductBySlug(slug),
+        getCategories()
+    ])
 
     // TODO: new
 
@@ -24,7 +28,7 @@ export default async function ProductPage({ params }: Props) {
     return (
         <>
         <Title title={`${ product.title === 'new' ? 'New Product' : product.title + ' [Edit Mode]' }`} />
-        <ProductForm product={product}/>
+        <ProductForm product={product} categories={categories}/>
         </>
     )
 }
