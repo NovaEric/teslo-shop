@@ -2,6 +2,7 @@
 
 import { ICategory, Product } from "@/interfaces";
 import { ProductImage as ProductWithImage } from "@prisma/client";
+import clsx from "clsx";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 
@@ -28,7 +29,14 @@ interface FormInputs {
 
 export const ProductForm = ({ product, categories }: Props) => {
 
-    const {handleSubmit, register, formState: { isValid }} = useForm<FormInputs>({
+    const {
+        handleSubmit, 
+        register, 
+        formState: { isValid },
+        getValues,
+        setValue,
+        watch
+    } = useForm<FormInputs>({
         defaultValues: {
             ...product,
             tags: product.tags.join(', '),
@@ -37,6 +45,15 @@ export const ProductForm = ({ product, categories }: Props) => {
             //TODO : Images
         }
     });
+
+    watch('sizes');
+
+    const onSizeChange = (size: string) => {
+
+        const sizes = new Set(getValues('sizes'));
+        sizes.has(size) ? sizes.delete(size) : sizes.add(size);
+        setValue('sizes', Array.from(sizes))
+    }
 
     const onSubmit = async(data: FormInputs) => {
         console.log({data})
@@ -115,9 +132,20 @@ export const ProductForm = ({ product, categories }: Props) => {
             {
               sizes.map( size => (
                 // bg-blue-500 text-white <--- si está seleccionado
-                <div key={ size } className="flex  items-center justify-center w-10 h-10 mr-2 border rounded-md">
-                  <span>{ size }</span>
-                </div>
+                  <div
+                      key={size}
+                      onClick={() => onSizeChange(size)}
+                      className={
+                        clsx(
+                            `p-2 border cursor-pointer rounded-md mr-2 mb-2 w-14 transition-all text-center`,
+                            {
+                                'bg-blue-500 text-white': getValues('sizes').includes(size)
+                            }
+                        )
+                      }
+                      >
+                      <span>{size}</span>
+                  </div>
               ))
             }
 
