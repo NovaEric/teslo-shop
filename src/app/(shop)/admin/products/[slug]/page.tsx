@@ -15,7 +15,7 @@ export default async function ProductPage({ params }: Props) {
 
     const { slug } = params;
 
-    const [ product, categories ] = await Promise.all([
+    const [product, categories] = await Promise.all([
         getProductBySlug(slug),
         getCategories()
     ])
@@ -27,8 +27,8 @@ export default async function ProductPage({ params }: Props) {
     }
     return (
         <>
-        <Title title={`${ product.title === 'new' ? 'New Product' : product.title + ' [Edit Mode]' }`} />
-        <ProductForm product={product} categories={categories}/>
+            <Title title={`${product.title === 'new' ? 'New Product' : product.title + ' [Edit Mode]'}`} />
+            <ProductForm product={product} categories={categories} />
         </>
     )
 }
