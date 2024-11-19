@@ -1,6 +1,7 @@
 "use client";
 
 import { ICategory, Product } from "@/interfaces";
+import { useForm } from "react-hook-form";
 
 interface Props {
   product: Product;
@@ -9,20 +10,48 @@ interface Props {
 
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
+interface FormInputs {
+    title: string;
+    slug: string;
+    description: string;
+    price: number;
+    inStock: number;
+    sizes: string[];
+    tags: string;
+    gender: "men" | "women" | "kids" | "unisex";
+    categoryId: string;
+  
+    //TODO: images?: FileList;
+  }
+
 export const ProductForm = ({ product, categories }: Props) => {
+
+    const {handleSubmit, register, formState: { isValid }} = useForm<FormInputs>({
+        defaultValues: {
+            ...product,
+            tags: product.tags.join(', '),
+            sizes: product.sizes ?? [],
+
+            //TODO : Images
+        }
+    });
+
+    const onSubmit = async(data: FormInputs) => {
+        console.log({data})
+    }
     
   return (
-    <form className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
+    <form onSubmit={handleSubmit(onSubmit)} className="grid px-5 mb-16 grid-cols-1 sm:px-0 sm:grid-cols-2 gap-3">
       {/* Textos */}
       <div className="w-full">
         <div className="flex flex-col mb-2">
           <span>Tittle</span>
-          <input title="Title" type="text" className="p-2 border rounded-md bg-gray-200" />
+          <input title="Title" type="text" className="p-2 border rounded-md bg-gray-200" { ...register('title', { required: true } )} />
         </div>
 
         <div className="flex flex-col mb-2">
           <span>Slug</span>
-          <input title="Slug" type="text" className="p-2 border rounded-md bg-gray-200" />
+          <input title="Slug" type="text" className="p-2 border rounded-md bg-gray-200"{ ...register('slug', { required: true } )} />
         </div>
 
         <div className="flex flex-col mb-2">
@@ -31,22 +60,23 @@ export const ProductForm = ({ product, categories }: Props) => {
             title="Description"
             rows={5}
             className="p-2 border rounded-md bg-gray-200"
+            { ...register('description', { required: true } )}
           ></textarea>
         </div>
 
         <div className="flex flex-col mb-2">
           <span>Price</span>
-          <input title="Price" type="number" className="p-2 border rounded-md bg-gray-200" />
+          <input title="Price" type="number" className="p-2 border rounded-md bg-gray-200" { ...register('price', { required: true, min: 0 } )} />
         </div>
 
         <div className="flex flex-col mb-2">
           <span>Tags</span>
-          <input title="Tags" type="text" className="p-2 border rounded-md bg-gray-200" />
+          <input title="Tags" type="text" className="p-2 border rounded-md bg-gray-200" { ...register('tags', { required: true } )} />
         </div>
 
         <div className="flex flex-col mb-2">
           <span>Gender</span>
-          <select title="Select Gender" className="p-2 border rounded-md bg-gray-200">
+          <select title="Select Gender" className="p-2 border rounded-md bg-gray-200" { ...register('gender', { required: true } )}>
             <option value="">[Select]</option>
             <option value="men">Men</option>
             <option value="women">Women</option>
@@ -57,7 +87,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
         <div className="flex flex-col mb-2">
           <span>Category</span>
-          <select title="Select Category" className="p-2 border rounded-md bg-gray-200">
+          <select title="Select Category" className="p-2 border rounded-md bg-gray-200" { ...register('categoryId', { required: true } )}>
             <option value="">[Select]</option>
             {
                 categories.map( ca => {
