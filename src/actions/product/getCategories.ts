@@ -1,6 +1,6 @@
 'use server'
 
-import { ICategories } from "@/interfaces";
+
 import prisma from "@/lib/prisma"
 
 export const getCategories = async() => {

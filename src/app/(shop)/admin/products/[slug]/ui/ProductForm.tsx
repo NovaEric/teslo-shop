@@ -1,10 +1,12 @@
 "use client";
 
 import { ICategory, Product } from "@/interfaces";
+import { ProductImage as ProductWithImage } from "@prisma/client";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 
 interface Props {
-  product: Product;
+  product: Product & { ProductImage?: ProductWithImage[]};
   categories: ICategory[];
 }
 
@@ -133,6 +135,29 @@ export const ProductForm = ({ product, categories }: Props) => {
                 accept="image/png, image/jpeg"
             />
 
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {product.ProductImage?.map((image) => (
+              <div key={image.id}>
+                <Image
+                  alt={product.title ?? ""}
+                  src={ `/products/${image.url}` }
+                  width={300}
+                  height={300}
+                  className="rounded-t shadow-md"
+                />
+
+                <button
+                  type="button"
+                //   onClick={() => deleteProductImage(image.id, image.url)}
+                  onClick={() => console.log(image.id, image.url)}
+                  className="btn-danger w-full rounded-b-xl"
+                >
+                  Eliminar
+                </button>
+              </div>
+            ))}
           </div>
 
         </div>
