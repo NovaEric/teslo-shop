@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   description: string;
-  images: string[];
+  images?: string[];
   inStock: number;
   price: number;
   sizes: Size[];
@@ -22,7 +22,7 @@ export interface ICartProduct {
   title: string;
   price: number;
   quantity: number;
-  images: string;
+  images?: string;
   sizes: Size;
 }
 
