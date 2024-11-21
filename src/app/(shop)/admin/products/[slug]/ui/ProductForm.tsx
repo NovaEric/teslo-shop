@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 
 interface Props {
-    product: Product & { ProductImage?: ProductWithImage[] };
+    product: Partial<Product> & { ProductImage?: ProductWithImage[] };
     categories: ICategory[];
 }
 
@@ -40,7 +40,7 @@ export const ProductForm = ({ product, categories }: Props) => {
     } = useForm<FormInputs>({
         defaultValues: {
             ...product,
-            tags: product.tags.join(', '),
+            tags: product.tags?.join(', '),
             sizes: product.sizes ?? [],
 
             //TODO : Images
@@ -145,6 +145,10 @@ export const ProductForm = ({ product, categories }: Props) => {
 
             {/* Selector de tallas y fotos */}
             <div className="w-full">
+                <div className="flex flex-col mb-2">
+                    <span>Inventory</span>
+                    <input title="Inventory" type="number" className="p-2 border rounded-md bg-gray-200" {...register('inStock', { required: true, min: 0 })} />
+                </div>
                 {/* As checkboxes */}
                 <div className="flex flex-col">
 

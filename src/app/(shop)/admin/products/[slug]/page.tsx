@@ -22,13 +22,13 @@ export default async function ProductPage({ params }: Props) {
 
     // TODO: new
 
-    if (!product) {
+    if (!product && slug !== 'new') {
         redirect('/admin/products');
     }
     return (
         <>
-            <Title title={`${product.title === 'new' ? 'New Product' : product.title + ' [Edit Mode]'}`} />
-            <ProductForm product={product} categories={categories} />
+            <Title title={`${!product?.title ? 'New Product' : product.title + ' [Edit Mode]'}`} />
+            <ProductForm product={product ?? {}} categories={categories} />
         </>
     )
 }
