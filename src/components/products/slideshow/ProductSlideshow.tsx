@@ -28,7 +28,16 @@ interface Props {
 export const ProductSlideshow = ( { images, title, className }: Props ) => {
 
   const [ thumbsSwiper, setThumbsSwiper ] = useState<SwiperObject>();
-
+  
+  if (!images.length) {
+    return <ProductImage
+      width={800}
+      height={540}
+      src={'placeholder.jpg'}
+      alt={title}
+      className="rounded-lg object-fill"
+    />
+  }
 
   return (
     <div className={ className }>
