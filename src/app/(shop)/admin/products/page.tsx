@@ -18,6 +18,10 @@ export default async function ProductsPage({ searchParams }: Props) {
 
   const { products, currentPage, totalPages } = await getPaginatedProductsWithImages({ page });
 
+  if (!products) {
+    return;
+  }
+
   return (
     <>
       <Title title="Products" />
