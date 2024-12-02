@@ -73,6 +73,11 @@ export const createUpdateProduct = async (formData: FormData) => {
                     }
                 })
             }
+
+            // save images
+            if (formData.getAll('images')) {
+                console.log(formData.getAll('images'))
+            }
     
             return { product };
         });

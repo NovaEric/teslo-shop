@@ -16,17 +16,16 @@ interface Props {
 const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 interface FormInputs {
-    title: string;
-    slug: string;
-    description: string;
-    price: number;
-    inStock: number;
-    sizes: string[];
-    tags: string;
-    gender: "men" | "women" | "kids" | "unisex";
-    categoryId: string;
-
-    //TODO: images?: FileList;
+  title: string;
+  slug: string;
+  description: string;
+  price: number;
+  inStock: number;
+  sizes: string[];
+  tags: string;
+  gender: "men" | "women" | "kids" | "unisex";
+  categoryId: string;
+  images?: FileList;
 }
 
 export const ProductForm = ({ product, categories }: Props) => {
@@ -45,8 +44,7 @@ export const ProductForm = ({ product, categories }: Props) => {
             ...product,
             tags: product.tags?.join(', '),
             sizes: product.sizes ?? [],
-
-            //TODO : Images
+            images: undefined
         }
     });
 
@@ -63,7 +61,7 @@ export const ProductForm = ({ product, categories }: Props) => {
 
         const formData = new FormData();
 
-        const { ...productToSave } = data;
+        const { images, ...productToSave } = data;
 
         if (product.id) {
             formData.append("id", product.id ?? "");
@@ -78,6 +76,13 @@ export const ProductForm = ({ product, categories }: Props) => {
         formData.append("tags", productToSave.tags);
         formData.append("categoryId", productToSave.categoryId);
         formData.append("gender", productToSave.gender);
+
+
+        if (images) {
+            for (let index = 0; index < images.length; index++) {
+                formData.append('images', images[index]);
+            }    
+        }
 
         const { ok, product: updatedProduct } = await createUpdateProduct(formData);
 
@@ -192,9 +197,10 @@ export const ProductForm = ({ product, categories }: Props) => {
                         <input
                             title="Photos"
                             type="file"
+                            { ...register('images') }
                             multiple
                             className="p-2 border rounded-md bg-gray-200"
-                            accept="image/png, image/jpeg"
+                            accept="image/png, image/jpeg, image/avif"
                         />
 
                     </div>
