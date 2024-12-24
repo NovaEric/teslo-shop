@@ -1,6 +1,6 @@
 "use client";
 
-import { createUpdateProduct } from "@/actions";
+import { createUpdateProduct, deleteProductImage } from "@/actions";
 import { ProductImage } from "@/components";
 import { ICategory, Product } from "@/interfaces";
 import { ProductImage as ProductWithImage } from "@prisma/client";
@@ -219,11 +219,10 @@ export const ProductForm = ({ product, categories }: Props) => {
 
                                 <button
                                     type="button"
-                                    //   onClick={() => deleteProductImage(image.id, image.url)}
-                                    onClick={() => console.log(image.id, image.url)}
+                                    onClick={() => deleteProductImage(image.id, image.url)}
                                     className="btn-danger w-full rounded-b-xl"
                                 >
-                                    Eliminar
+                                    Delete
                                 </button>
                             </div>
                         ))}
