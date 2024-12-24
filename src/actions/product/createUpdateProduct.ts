@@ -61,7 +61,6 @@ export const createUpdateProduct = async (formData: FormData) => {
                     }
                 });
     
-                console.log({updatedProduct: product})
             } else {
                 product = await prisma.product.create({
                     data: {
@@ -79,8 +78,17 @@ export const createUpdateProduct = async (formData: FormData) => {
             // save images
             if (formData.getAll('images')) {
                 //getting urls of the images
-                const images = await uploadImages(formData.getAll('images') as File[])
-                console.log(images)
+                const images = await uploadImages(formData.getAll('images') as File[]);
+                if (!images) {
+                    throw new Error('Could not load images, rollingback')
+                }
+
+                await prisma.productImage.createMany({
+                    data: images.map( image => ({
+                        url: image!,
+                        productId: product.id
+                    }))
+                })
             }
     
             return { product };
@@ -116,7 +124,7 @@ const uploadImages = async (images: File[]) => {
                 const base64Image = Buffer.from(buffer).toString('base64');
 
                 return cloudinary.uploader.upload(`data:image/png;base64,${base64Image}`)
-                    .then( res => res.secure_url );
+                    .then( r => r.secure_url );
         
             } catch (error) {
                 console.log(error);
