@@ -1,11 +1,11 @@
 'use client';
 
 
-import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { Product } from '@/interfaces';
+import { useState } from 'react';
 
 interface Props {
   product: Product;
@@ -14,7 +14,7 @@ interface Props {
 
 export const ProductGridItem = ( { product }: Props ) => {
 
-  const [ displayImage, setDisplayImage ] = useState( product.images[ 0 ] );
+  const [ displayImage, setDisplayImage ] = useState( product.images ? product.images[ 0 ] : null );
 
 
   return (
@@ -26,8 +26,8 @@ export const ProductGridItem = ( { product }: Props ) => {
           className="w-full object-cover rounded"
           width={ 500 }
           height={ 500 }
-          onMouseEnter={ () => setDisplayImage( product.images[1] )  }
-          onMouseLeave={ () => setDisplayImage( product.images[0] ) }
+          onMouseEnter={ () => setDisplayImage( product.images ? product.images[1] : null )  }
+          onMouseLeave={ () => setDisplayImage( product.images ? product.images[0] : null ) }
         />
       </Link>
 
