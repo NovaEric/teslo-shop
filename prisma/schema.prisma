@@ -70,7 +70,7 @@ model ProductImage {
   productId String
 }
 
-model TesloUser {
+model User {
   id            String       @id @default(uuid())
   name          String
   email         String       @unique
@@ -102,7 +102,7 @@ model UserAddress {
   country   Country @relation(fields: [countryId], references: [id])
   countryId String
 
-  user   TesloUser   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 }
 
@@ -117,7 +117,7 @@ model Order {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   // Relaciones
-  user          TesloUser          @relation(fields: [userId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
   userId        String
   OrderItem     OrderItem[]
   OrderAddress  OrderAddress?
